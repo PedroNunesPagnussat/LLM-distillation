@@ -172,4 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
-data/*
+data/example
+data/hf_dir
+data/results
+data/raw
+data/summary
