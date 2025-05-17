@@ -36,7 +36,7 @@ LABEL2ID = {"negativo": 0, "positivo": 1}
 ID2LABEL = {0: "negativo", 1: "positivo"}
 
 MAX_LENGTH = 500
-BATCH_SIZE = 64
+BATCH_SIZE = 32
 EPOCHS = 5
 SEED = 42
 
