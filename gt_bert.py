@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent
 
 # Define subdirectories relative to the script file
 TRAIN_PREFIX = BASE_DIR / 'data' / 'train'
+TEST_PREFIX = BASE_DIR / 'data' / 'test'
 RESULTS_PREFIX = BASE_DIR / 'data' / 'results' / 'gt_bert'
 SUMMARY_PREFIX = BASE_DIR / 'data' / 'summaries'
 OUTPUT_PREFIX = BASE_DIR / 'data' / 'hf_dir'
