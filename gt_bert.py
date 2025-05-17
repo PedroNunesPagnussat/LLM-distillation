@@ -6,6 +6,7 @@ from transformers import (
     AutoModelForSequenceClassification,
     Trainer,
     TrainingArguments,
+    DataCollatorWithPadding,
     set_seed,
 )
 from datasets import Dataset
@@ -80,6 +81,7 @@ def compute_metrics(pred):
 
 def train_and_evaluate(model_name, model_checkpoint, dataset_name):
     logger.info(f"Training {model_name} on {dataset_name}")
+    
     tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
     model = AutoModelForSequenceClassification.from_pretrained(
         model_checkpoint,
@@ -87,29 +89,31 @@ def train_and_evaluate(model_name, model_checkpoint, dataset_name):
         id2label=ID2LABEL,
         label2id=LABEL2ID,
     )
-    
+
     train_ds, test_ds, test_df = load_and_prepare(dataset_name, tokenizer)
+    data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+
     training_args = TrainingArguments(
-        output_dir=f"./{OUTPUT_PREFIX}_gt_bert_{model_name}_{dataset_name}",
+        output_dir=str(OUTPUT_PREFIX / f"gt_bert_{model_name}_{dataset_name}"),
         num_train_epochs=EPOCHS,
         per_device_train_batch_size=BATCH_SIZE,
         per_device_eval_batch_size=BATCH_SIZE,
         save_strategy="no",
         seed=SEED,
         load_best_model_at_end=False,
-        # logging_steps=100,
         disable_tqdm=False,
-        # fp16=True,
-        # report_to=[],
+        report_to=[],
     )
+
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=train_ds,
         eval_dataset=test_ds,
-        tokenizer=tokenizer,
+        data_collator=data_collator,
         compute_metrics=compute_metrics,
     )
+
     trainer.train()
     logger.success(f"Finished training {model_name} on {dataset_name}")
 
@@ -117,7 +121,7 @@ def train_and_evaluate(model_name, model_checkpoint, dataset_name):
     pred_labels = preds.predictions.argmax(-1)
     true_labels = preds.label_ids
 
-    # Save detailed classification report (CSV)
+    # Save detailed classification report
     report = classification_report(
         true_labels, pred_labels,
         target_names=[ID2LABEL[0], ID2LABEL[1]],
@@ -125,15 +129,15 @@ def train_and_evaluate(model_name, model_checkpoint, dataset_name):
     )
     report_df = pd.DataFrame(report).transpose()
     base = f"{dataset_name}_{model_name}"
-    report_path = os.path.join(RESULTS_PREFIX, f"{base}_report.csv")
+    report_path = RESULTS_PREFIX / f"{base}_report.csv"
     report_df.to_csv(report_path)
     logger.info(f"Saved classification report: {report_path}")
 
-    # Save predictions (CSV)
+    # Save predictions
     test_df["predicted"] = pred_labels
     test_df["predicted_label"] = test_df["predicted"].map(ID2LABEL)
     test_df["true_label"] = test_df["label"].map(ID2LABEL)
-    preds_path = os.path.join(RESULTS_PREFIX, f"{base}_predictions.csv")
+    preds_path = RESULTS_PREFIX / f"{base}_predictions.csv"
     test_df.to_csv(preds_path, index=False)
     logger.info(f"Saved predictions: {preds_path}")
 
