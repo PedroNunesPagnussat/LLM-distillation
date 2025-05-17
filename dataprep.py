@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import os
 from loguru import logger
+from transformers import AutoTokenizer
 
 SEED = 42  # Reproducibility
 
@@ -13,6 +14,11 @@ EXAMPLE_PREFIX = 'data/example/'
 
 COLUMNS_TO_KEEP = ['original_index', 'review_text', 'polarity']
 
+# Load tokenizer (BERTimbau)
+BERT_MODEL = "neuralmind/bert-base-portuguese-cased"
+tokenizer = AutoTokenizer.from_pretrained(BERT_MODEL)
+MAX_TOKENS = 500
+
 def load_and_clean_dataset(file_path):
     logger.info(f"Loading dataset: {file_path}")
     df = pd.read_csv(file_path)
@@ -22,7 +28,16 @@ def load_and_clean_dataset(file_path):
     df.drop_duplicates(subset=['original_index'], inplace=True)
     df.dropna(subset=['review_text', 'polarity'], inplace=True)
     df = df[df['review_text'].str.strip() != '']
-    return df
+
+    # Token length filtering
+    logger.info("Filtering samples by BERT token length <= 512")
+    df['num_tokens'] = df['review_text'].apply(lambda x: len(tokenizer(x, truncation=False, add_special_tokens=True)['input_ids']))
+    before = len(df)
+    df = df[df['num_tokens'] <= MAX_TOKENS].copy()
+    after = len(df)
+    logger.info(f"Removed {before - after} samples over token limit")
+
+    return df.drop(columns=['num_tokens'])
 
 def save_dataframe(df, path, name):
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -46,7 +61,7 @@ def process_dataset(filename, rows=10_000):
 
     required_size = 2 * rows + 10
     if len(df) < required_size:
-        raise ValueError(f"[{name}] Not enough samples (required={required_size}, available={len(df)})")
+        raise ValueError(f"[{name}] Not enough samples after filtering (required={required_size}, available={len(df)})")
 
     train_df, temp_df = train_test_split(df, train_size=rows, shuffle=True, random_state=SEED)
     test_df, remaining_df = train_test_split(temp_df, train_size=rows, shuffle=True, random_state=SEED)

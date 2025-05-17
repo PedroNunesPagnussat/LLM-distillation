@@ -1,0 +1,4 @@
+When comparing results the most important in the report shold be the
+
+macro avg COLUMN
+f1-score  ROW
