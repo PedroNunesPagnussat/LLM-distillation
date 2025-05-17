@@ -14,11 +14,21 @@ from loguru import logger
 import torch
 import gc
 
-TRAIN_PREFIX = 'data/train/'
-TEST_PREFIX = 'data/test/'
-RESULTS_PREFIX = 'data/results/gt_bert/'
-SUMMARY_PREFIX = 'data/summaries/'
-OUTPUT_PREFIX = "./data/hf_dir/"
+from pathlib import Path
+
+# Get base directory of the current script
+BASE_DIR = Path(__file__).resolve().parent
+
+# Define subdirectories relative to the script file
+TRAIN_PREFIX = BASE_DIR / 'data' / 'train'
+ESULTS_PREFIX = BASE_DIR / 'data' / 'results' / 'gt_bert'
+SUMMARY_PREFIX = BASE_DIR / 'data' / 'summaries'
+OUTPUT_PREFIX = BASE_DIR / 'data' / 'hf_dir'
+
+# Ensure directories exist
+RESULTS_PREFIX.mkdir(parents=True, exist_ok=True)
+SUMMARY_PREFIX.mkdir(parents=True, exist_ok=True)
+OUTPUT_PREFIX.mkdir(parents=True, exist_ok=True)
 
 LABEL2ID = {"negativo": 0, "positivo": 1}
 ID2LABEL = {0: "negativo", 1: "positivo"}
@@ -29,9 +39,6 @@ EPOCHS = 5
 SEED = 42
 
 set_seed(SEED)
-os.makedirs(RESULTS_PREFIX, exist_ok=True)
-os.makedirs(SUMMARY_PREFIX, exist_ok=True)
-os.makedirs(OUTPUT_PREFIX, exist_ok=True)
 
 MODELS = {
     "XLM-R": "xlm-roberta-base",

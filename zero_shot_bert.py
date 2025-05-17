@@ -3,15 +3,22 @@ import pandas as pd
 from sklearn.metrics import classification_report
 from tqdm import tqdm
 import os
+from pathlib import Path
 
 # Paths
-TEST_PREFIX = 'data/test/'
-RESULTS_PREFIX = 'data/results/zero_shot'
-SUMMARY_PREFIX = 'data/summary/'
 
-os.makedirs(SUMMARY_PREFIX, exist_ok=True)
-os.makedirs(RESULTS_PREFIX, exist_ok=True)
 
+# Base directory of the script
+BASE_DIR = Path(__file__).resolve().parent
+
+# Updated paths
+TEST_PREFIX = BASE_DIR / 'data' / 'test'
+RESULTS_PREFIX = BASE_DIR / 'data' / 'results' / 'zero_shot'
+SUMMARY_PREFIX = BASE_DIR / 'data' / 'summary'
+
+# Ensure directories exist
+RESULTS_PREFIX.mkdir(parents=True, exist_ok=True)
+SUMMARY_PREFIX.mkdir(parents=True, exist_ok=True)
 # Load test dataset
 def load_test_dataset(name):
     path = os.path.join(TEST_PREFIX, f"{name}.csv")
