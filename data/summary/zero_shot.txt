@@ -1,0 +1,48 @@
+Dataset: utlc_movies | Model: BERTimbau
+              precision    recall  f1-score     support
+0.0            0.074616  0.365500  0.123932   1171.0000
+1.0            0.825750  0.398799  0.537845   8829.0000
+accuracy       0.394900  0.394900  0.394900      0.3949
+macro avg      0.450183  0.382149  0.330888  10000.0000
+weighted avg   0.737793  0.394900  0.489376  10000.0000
+
+Dataset: utlc_movies | Model: XLM-R
+              precision    recall  f1-score     support
+0.0            0.100044  0.193851  0.131977   1171.0000
+1.0            0.877894  0.768717  0.819686   8829.0000
+accuracy       0.701400  0.701400  0.701400      0.7014
+macro avg      0.488969  0.481284  0.475831  10000.0000
+weighted avg   0.786808  0.701400  0.739155  10000.0000
+
+Dataset: utlc_apps | Model: BERTimbau
+              precision    recall  f1-score     support
+0.0            0.206765  0.603379  0.307989   2249.0000
+1.0            0.740471  0.328345  0.454952   7751.0000
+accuracy       0.390200  0.390200  0.390200      0.3902
+macro avg      0.473618  0.465862  0.381470  10000.0000
+weighted avg   0.620441  0.390200  0.421900  10000.0000
+
+Dataset: utlc_apps | Model: XLM-R
+              precision    recall  f1-score     support
+0.0            0.209559  0.623833  0.313730   2249.0000
+1.0            0.744024  0.317249  0.444826   7751.0000
+accuracy       0.386200  0.386200  0.386200      0.3862
+macro avg      0.476792  0.470541  0.379278  10000.0000
+weighted avg   0.623823  0.386200  0.415343  10000.0000
+
+Dataset: olist | Model: BERTimbau
+              precision    recall  f1-score     support
+0.0            0.246178  0.477104  0.324777   2970.0000
+1.0            0.634072  0.382788  0.477382   7030.0000
+accuracy       0.410800  0.410800  0.410800      0.4108
+macro avg      0.440125  0.429946  0.401079  10000.0000
+weighted avg   0.518867  0.410800  0.432058  10000.0000
+
+Dataset: olist | Model: XLM-R
+              precision    recall  f1-score     support
+0.0            0.319713  0.901010  0.471958   2970.0000
+1.0            0.819632  0.190043  0.308545   7030.0000
+accuracy       0.401200  0.401200  0.401200      0.4012
+macro avg      0.569673  0.545526  0.390251  10000.0000
+weighted avg   0.671156  0.401200  0.357079  10000.0000
+

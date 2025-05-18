@@ -9,6 +9,7 @@ def parse_report(report_path, method):
     rows = []
     with open(report_path, "r") as f:
         content = f.read()
+
     # Split per dataset/model block
     blocks = re.split(r'Dataset:\s*', content)
     for block in blocks[1:]:
@@ -18,25 +19,23 @@ def parse_report(report_path, method):
         else:
             continue
 
-        # Find the line that starts with "f1-score"
-        f1_line = None
+        # Find the "macro avg" line
+        macro_line = None
         for line in block.split('\n'):
-            if line.strip().startswith("f1-score"):
-                f1_line = line
+            if line.strip().startswith("macro avg"):
+                macro_line = line
                 break
-        if not f1_line:
+        if not macro_line:
             continue
 
-        # Extract all floats from the line (for all columns)
-        numbers = [float(n) for n in re.findall(r"[-+]?\d*\.\d+|\d+", f1_line)]
-        # The macro avg f1-score is always the 4th index (0-based) if the columns are:
-        # 0.0 | 1.0 | accuracy | macro avg | weighted avg
-        # So in "f1-score" row: 0, 1, 2, 3, 4  (macro avg = 3, weighted avg = 4)
-        macro_f1 = numbers[3] if len(numbers) >= 4 else None
+        # Extract all floats from the macro avg line
+        numbers = [float(n) for n in re.findall(r"[-+]?\d*\.\d+|\d+", macro_line)]
+        # "macro avg" line format: precision, recall, f1-score, support
+        macro_f1 = numbers[2] if len(numbers) >= 3 else None
 
         rows.append({
-            "dataset": dataset.strip(),
-            "model": model.strip(),
+            "dataset": dataset,
+            "model": model,
             "method": method,
             "macro_f1": macro_f1
         })

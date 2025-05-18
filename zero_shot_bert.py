@@ -5,9 +5,6 @@ from tqdm import tqdm
 import os
 from pathlib import Path
 
-# Paths
-
-
 # Base directory of the script
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -15,13 +12,15 @@ BASE_DIR = Path(__file__).resolve().parent
 TEST_PREFIX = BASE_DIR / 'data' / 'test'
 RESULTS_PREFIX = BASE_DIR / 'data' / 'results' / 'zero_shot'
 SUMMARY_PREFIX = BASE_DIR / 'data' / 'summary'
+SUMMARY_FILE = SUMMARY_PREFIX / "zero_shot.txt"
 
 # Ensure directories exist
 RESULTS_PREFIX.mkdir(parents=True, exist_ok=True)
 SUMMARY_PREFIX.mkdir(parents=True, exist_ok=True)
+
 # Load test dataset
 def load_test_dataset(name):
-    path = os.path.join(TEST_PREFIX, f"{name}.csv")
+    path = TEST_PREFIX / f"{name}.csv"
     df = pd.read_csv(path)
     return df
 
@@ -30,11 +29,9 @@ LABELS = ["positivo", "negativo"]
 LABEL_TO_INT = {"positivo": 1, "negativo": 0}
 
 # Run zero-shot classification
-def evaluate_zero_shot(model_name, dataset_name):
-    print(f"Running {model_name} on {dataset_name}")
-    classifier = pipeline("zero-shot-classification", model=model_name, device_map="auto")
-    # classifier = pipeline("text-classification", model=model_name, device_map="auto")
-
+def evaluate_zero_shot(model_path, model_name, dataset_name, summary_file):
+    print(f"Running {model_name} on {dataset_name}", flush=True)
+    classifier = pipeline("zero-shot-classification", model=model_path, device_map="auto")
 
     df = load_test_dataset(dataset_name)
     results = []
@@ -46,11 +43,19 @@ def evaluate_zero_shot(model_name, dataset_name):
 
     df['predicted'] = results
     report = classification_report(df['polarity'], df['predicted'], output_dict=True)
-    
-    # Save result file
-    df.to_csv(os.path.join(RESULTS_PREFIX, f"{dataset_name}_{model_name.replace('/', '_')}.csv"), index=False)
 
-    # Return classification report
+    # Save predictions
+    result_filename = f"{dataset_name}_{model_name}.csv"
+    df.to_csv(RESULTS_PREFIX / result_filename, index=False)
+
+    # Write individual report immediately to summary file
+    report_df = pd.DataFrame(report).transpose()
+    summary_file.write(f"Dataset: {dataset_name} | Model: {model_name}\n")
+    summary_file.write(report_df.to_string())
+    summary_file.write("\n\n")
+    summary_file.flush()
+    os.fsync(summary_file.fileno())
+
     return report
 
 if __name__ == "__main__":
@@ -60,21 +65,9 @@ if __name__ == "__main__":
         "xlm-roberta-base": "XLM-R"
     }
 
-    all_reports = {}
-
-    for dataset in datasets:
-        all_reports[dataset] = {}
-        for model_path, model_name in models.items():
-            report = evaluate_zero_shot(model_path, dataset)
-            all_reports[dataset][model_name] = report
-
-    # Optionally save global report summary
-    summary_path = os.path.join(SUMMARY_PREFIX, "zero_shot_summary.txt")
-    with open(summary_path, 'w') as f:
-        for dataset in all_reports:
-            for model in all_reports[dataset]:
-                f.write(f"Dataset: {dataset} | Model: {model}\n")
-                f.write(pd.DataFrame(all_reports[dataset][model]).to_string())
-                f.write("\n\n")
+    with open(SUMMARY_FILE, "a") as summary_file:
+        for dataset in datasets:
+            for model_path, model_name in models.items():
+                evaluate_zero_shot(model_path, model_name, dataset, summary_file)
 
     print("Evaluation complete. Reports saved.")
