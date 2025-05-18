@@ -40,8 +40,8 @@ SEED = 42
 set_seed(SEED)
 
 MODELS = {
-    "BERTimbau": "neuralmind/bert-base-portuguese-cased",
-    # "XLM-R": "xlm-roberta-base",
+    # "BERTimbau": "neuralmind/bert-base-portuguese-cased",
+    "XLM-R": "xlm-roberta-base",
 }
 DATASETS = ['utlc_movies', 'utlc_apps', 'olist']
 
