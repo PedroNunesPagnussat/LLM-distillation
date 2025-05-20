@@ -33,15 +33,15 @@ LABEL2ID = {"negativo": 0, "positivo": 1}
 ID2LABEL = {0: "negativo", 1: "positivo"}
 
 MAX_LENGTH = 500
-BATCH_SIZE = 8
+BATCH_SIZE = 32
 EPOCHS = 3
 SEED = 42
 
 set_seed(SEED)
 
 MODELS = {
-    # "BERTimbau": "neuralmind/bert-base-portuguese-cased",
     "XLM-R": "xlm-roberta-base",
+    "BERTimbau": "neuralmind/bert-base-portuguese-cased"
 }
 DATASETS = ['utlc_movies', 'utlc_apps', 'olist']
 
@@ -146,7 +146,7 @@ def train_and_evaluate(model_name, model_checkpoint, dataset_name, summary_file)
     logger.info(f"Wrote summary for {dataset_name} | {model_name}")
 
 def main():
-    with open(SUMMARY_FILE, "a") as summary_file:
+    with open(SUMMARY_FILE, "w") as summary_file:
         for dataset in DATASETS:
             for model_name, model_ckpt in MODELS.items():
                 train_and_evaluate(model_name, model_ckpt, dataset, summary_file)

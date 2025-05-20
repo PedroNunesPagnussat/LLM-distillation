@@ -65,7 +65,7 @@ if __name__ == "__main__":
         "xlm-roberta-base": "XLM-R"
     }
 
-    with open(SUMMARY_FILE, "a") as summary_file:
+    with open(SUMMARY_FILE, "w") as summary_file:
         for dataset in datasets:
             for model_path, model_name in models.items():
                 evaluate_zero_shot(model_path, model_name, dataset, summary_file)
