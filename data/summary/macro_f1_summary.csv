@@ -1,5 +1,0 @@
-dataset,model,method,macro_f1
-utlc_movies,BERTimbau,zero_shot,0.330888
-utlc_movies,XLM-R,zero_shot,0.475831
-utlc_apps,BERTimbau,zero_shot,0.38147
-utlc_apps,XLM-R,zero_shot,0.379278

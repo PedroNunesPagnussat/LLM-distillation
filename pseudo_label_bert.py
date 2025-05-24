@@ -17,12 +17,12 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
 # Define subdirectories relative to the script file
-TRAIN_PREFIX = BASE_DIR / 'data' / 'train'
+PSEUDO_LABELS_PREFIX = BASE_DIR / 'data' / 'pseudo_labels'
 TEST_PREFIX = BASE_DIR / 'data' / 'test'
-RESULTS_PREFIX = BASE_DIR / 'data' / 'results' / 'gt_bert'
+RESULTS_PREFIX = BASE_DIR / 'data' / 'results' / 'pseudo_label_bert'
 SUMMARY_PREFIX = BASE_DIR / 'data' / 'summary'
 OUTPUT_PREFIX = BASE_DIR / 'data' / 'hf_dir'
-SUMMARY_FILE = SUMMARY_PREFIX / "gt_bert_summary.txt"
+SUMMARY_FILE = SUMMARY_PREFIX / "pseudo_label_bert_summary.txt"
 
 # Ensure directories exist
 RESULTS_PREFIX.mkdir(parents=True, exist_ok=True)
@@ -54,16 +54,25 @@ def load_and_prepare(dataset_name, tokenizer):
             max_length=MAX_LENGTH,
         )
     
-    train_path = TRAIN_PREFIX / f"{dataset_name}.csv"
+    # Load pseudo-labels for training
+    train_path = PSEUDO_LABELS_PREFIX / f"{dataset_name}.csv"
     test_path = TEST_PREFIX / f"{dataset_name}.csv"
+    
     train_df = pd.read_csv(train_path)
     test_df = pd.read_csv(test_path)
-    train_df["label"] = train_df["polarity"].astype(int)
+    
+    # Use predicted labels from LLM for training
+    train_df["label"] = train_df["predicted"]
+    
+    # Use real labels for testing
     test_df["label"] = test_df["polarity"].astype(int)
+    
     train_ds = Dataset.from_pandas(train_df[["review_text", "label"]])
     test_ds = Dataset.from_pandas(test_df[["review_text", "label"]])
+    
     train_ds = train_ds.map(preprocess_function, batched=True)
     test_ds = test_ds.map(preprocess_function, batched=True)
+    
     return train_ds, test_ds, test_df
 
 def compute_metrics(pred):
@@ -77,7 +86,7 @@ def compute_metrics(pred):
     return {"accuracy": report["accuracy"]}
 
 def train_and_evaluate(model_name, model_checkpoint, dataset_name, summary_file):
-    logger.info(f"Training {model_name} on {dataset_name}")
+    logger.info(f"Training {model_name} on {dataset_name} with pseudo-labels")
     tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
     model = AutoModelForSequenceClassification.from_pretrained(
         model_checkpoint,
@@ -90,7 +99,7 @@ def train_and_evaluate(model_name, model_checkpoint, dataset_name, summary_file)
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
     training_args = TrainingArguments(
-        output_dir=OUTPUT_PREFIX / f"gt_bert_{model_name}_{dataset_name}",
+        output_dir=OUTPUT_PREFIX / f"pseudo_label_bert_{model_name}_{dataset_name}",
         num_train_epochs=EPOCHS,
         per_device_train_batch_size=BATCH_SIZE,
         per_device_eval_batch_size=BATCH_SIZE,
@@ -109,7 +118,7 @@ def train_and_evaluate(model_name, model_checkpoint, dataset_name, summary_file)
     )
 
     trainer.train()
-    logger.success(f"Finished training {model_name} on {dataset_name}")
+    logger.success(f"Finished training {model_name} on {dataset_name} with pseudo-labels")
 
     preds = trainer.predict(test_ds)
     pred_labels = preds.predictions.argmax(-1)
@@ -144,6 +153,7 @@ def train_and_evaluate(model_name, model_checkpoint, dataset_name, summary_file)
     os.fsync(summary_file.fileno())
 
     logger.info(f"Wrote summary for {dataset_name} | {model_name}")
+
 
 def main():
     with open(SUMMARY_FILE, "w") as summary_file:
