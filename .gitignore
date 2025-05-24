@@ -172,7 +172,5 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
-data/example
 data/hf_dir
-data/results
 data/raw
