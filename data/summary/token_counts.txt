@@ -1,0 +1,42 @@
+GPT-4.1 Nano Token Count Summary
+==============================
+
+Dataset: utlc_movies
+--------------------------------------------------
+
+TRAIN SET:
+
+  Total tokens: 529887
+
+
+TEST SET:
+
+  Total tokens: 532663
+
+
+Dataset: utlc_apps
+--------------------------------------------------
+
+TRAIN SET:
+
+  Total tokens: 198632
+
+
+TEST SET:
+
+  Total tokens: 196312
+
+
+Dataset: olist
+--------------------------------------------------
+
+TRAIN SET:
+
+  Total tokens: 197555
+
+
+TEST SET:
+
+  Total tokens: 200159
+
+

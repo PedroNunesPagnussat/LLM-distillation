@@ -105,7 +105,6 @@ def train_and_evaluate(model_name, model_checkpoint, dataset_name, summary_file)
         per_device_eval_batch_size=BATCH_SIZE,
         save_strategy="no",
         seed=SEED,
-        load_best_model_at_end=True,
         disable_tqdm=False,
         report_to=[],
     )
