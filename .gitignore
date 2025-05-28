@@ -174,3 +174,5 @@ cython_debug/
 .pypirc
 data/hf_dir
 data/raw
+data/results
+results
