@@ -73,6 +73,9 @@ def load_and_clean_dataset(file_path):
     after = len(df)
     logger.info(f"Removed {before - after} samples over token limit")
 
+    print(f"Final size for {file_path}: {len(df)} samples")
+
+
     return df.drop(columns=['num_tokens'])
 
 def save_dataframe(df, path, name):
@@ -91,14 +94,22 @@ def process_dataset(filename):
 
     df = load_and_clean_dataset(file_path)
     
+    
     test_rows = min(TEST_ROWS, len(df) - TRAIN_ROWS)
     train_df, test_df = train_test_split(df, train_size=TRAIN_ROWS, test_size=test_rows, shuffle=True, random_state=SEED)
     
 
     logger.success(f"[{name}] Train: {len(train_df)} | Test: {len(test_df)}")
+
     logger.info(f"[{name}] Train distribution:\n{train_df['polarity'].value_counts()}")
+    logger.info(f"[{name}] Train distribution:\n{train_df['polarity'].value_counts(normalize=True) * 100}")
+
+    logger.info(f"[{name}] Test distribution:\n{test_df['polarity'].value_counts()}")
+    logger.info(f"[{name}] Test distribution:\n{test_df['polarity'].value_counts(normalize=True) * 100}")
+
     logger.info(f"[{name}] Test distribution:\n{test_df['polarity'].value_counts()}")
 
+    return
     save_dataframe(train_df, train_path, f"{name} - Train")
     save_dataframe(test_df, test_path, f"{name} - Test")
 
