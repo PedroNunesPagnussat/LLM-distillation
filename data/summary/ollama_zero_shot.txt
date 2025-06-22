@@ -1,0 +1,24 @@
+Dataset: utlc_movies | Model: LLM-Zero-Shot
+              precision    recall  f1-score      support
+0.0            0.106982  0.911370  0.191485   1715.00000
+1.0            0.995705  0.729792  0.842259  48285.00000
+accuracy       0.736020  0.736020  0.736020      0.73602
+macro avg      0.551343  0.820581  0.516872  50000.00000
+weighted avg   0.965222  0.736020  0.819937  50000.00000
+
+Dataset: utlc_apps | Model: LLM-Zero-Shot
+              precision    recall  f1-score      support
+0.0            0.475020  0.963229  0.636264   9328.00000
+1.0            0.988966  0.755852  0.856836  40672.00000
+accuracy       0.794540  0.794540  0.794540      0.79454
+macro avg      0.731993  0.859540  0.746550  50000.00000
+weighted avg   0.893084  0.794540  0.815686  50000.00000
+
+Dataset: olist | Model: LLM-Zero-Shot
+              precision    recall  f1-score      support
+0.0            0.719238  0.975514  0.827999   6657.00000
+1.0            0.990300  0.867804  0.925014  19176.00000
+accuracy       0.895560  0.895560  0.895560      0.89556
+macro avg      0.854769  0.921659  0.876507  25833.00000
+weighted avg   0.920449  0.895560  0.900014  25833.00000
+
