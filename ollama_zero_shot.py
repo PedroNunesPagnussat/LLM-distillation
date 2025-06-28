@@ -83,16 +83,18 @@ def call_ollama_with_retry(prompt, max_retries=3, backoff_factor=2):
                 },
             )
             content = response['message']['content']
-            # print(f"Response content: {content}")  # Debugging line
             try:
                 json_response = json.loads(content)
                 return json_response.get("sentiment", "").lower()
+            
             except json.JSONDecodeError:
                 if "positivo" in content.lower():
                     return "positivo"
                 elif "negativo" in content.lower():
                     return "negativo"
+                
                 print(f"Unrecognized response format: {content}")
+                print(f"Review: {prompt.split('Texto: ')[1]}")
                 return None
 
         except Exception as e:

@@ -175,3 +175,4 @@ cython_debug/
 data/hf_dir
 data/raw
 data/results
+results/*.png
