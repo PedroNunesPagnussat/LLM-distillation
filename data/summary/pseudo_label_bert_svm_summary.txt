@@ -1,0 +1,24 @@
+Dataset: utlc_movies | Model: BERTimbau + SVM (Pseudo-Labels, No Scaling)
+              precision    recall  f1-score     support
+negativo       0.154864  0.682216  0.252427   1715.0000
+positivo       0.987160  0.867764  0.923620  48285.0000
+accuracy       0.861400  0.861400  0.861400      0.8614
+macro avg      0.571012  0.774990  0.588023  50000.0000
+weighted avg   0.958612  0.861400  0.900598  50000.0000
+
+Dataset: utlc_apps | Model: BERTimbau + SVM (Pseudo-Labels, No Scaling)
+              precision    recall  f1-score     support
+negativo       0.621499  0.911128  0.738947   9328.0000
+positivo       0.977178  0.872738  0.922010  40672.0000
+accuracy       0.879900  0.879900  0.879900      0.8799
+macro avg      0.799339  0.891933  0.830479  50000.0000
+weighted avg   0.910823  0.879900  0.887858  50000.0000
+
+Dataset: olist | Model: BERTimbau + SVM (Pseudo-Labels, No Scaling)
+              precision    recall  f1-score       support
+negativo       0.787078  0.953432  0.862306   6657.000000
+positivo       0.982554  0.910461  0.945135  19176.000000
+accuracy       0.921534  0.921534  0.921534      0.921534
+macro avg      0.884816  0.931947  0.903720  25833.000000
+weighted avg   0.932181  0.921534  0.923790  25833.000000
+

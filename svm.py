@@ -31,15 +31,18 @@ SUMMARY_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 # === EMBEDDING FUNCTION ===
 @torch.no_grad()
-def compute_embeddings(texts, tokenizer, model):
+def compute_embeddings(texts, tokenizer, model, batch_size=128):
     model.eval()
     embeddings = []
-    for text in tqdm(texts, desc="Embedding"):
-        inputs = tokenizer(text, return_tensors="pt", truncation=True, padding="max_length", max_length=MAX_LENGTH)
+    
+    for i in tqdm(range(0, len(texts), batch_size), desc="Embedding"):
+        batch_texts = texts[i:i + batch_size]
+        inputs = tokenizer(batch_texts, return_tensors="pt", truncation=True, padding=True, max_length=MAX_LENGTH)
         inputs = {k: v.to(DEVICE) for k, v in inputs.items()}
         outputs = model(**inputs)
-        cls_embedding = outputs.last_hidden_state[:, 0, :].squeeze().cpu().numpy()
-        embeddings.append(cls_embedding)
+        cls_embeddings = outputs.last_hidden_state[:, 0, :].cpu().numpy()
+        embeddings.extend(cls_embeddings)
+        
     return embeddings
 
 # === PIPELINE ===
