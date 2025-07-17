@@ -1,0 +1,58 @@
+{
+    "utlc_movies": {
+        "BERTimbau (GT)": 0.798253,
+        "XLM-R (GT)": 0.491275,
+        "SVM(GT)": 0.699057,
+        "GPT 4.1 Nano (Zero-Shot)": 0.608376,
+        "LLama3.2:3b (Zero-Shot)": 0.516872,
+        "BERTimbau (GPT 4.1 Nano Labels)": 0.613812,
+        "XLM-R (GPT 4.1 Nano Labels)": 0.560403,
+        "SVM (GPT 4.1 Nano Labels)": 0.588023,
+        "BERTimbau (LLama3.2:3b Labels)": 0.536916,
+        "XLM-R (LLama3.2:3b Labels)": 0.547359,
+        "BERTimbau (Zero-Shot)": 0.334423,
+        "XLM-R (Zero-Shot)": 0.134051
+    },
+    "utlc_apps": {
+        "BERTimbau (GT)": 0.90346,
+        "XLM-R (GT)": 0.89402,
+        "SVM (GT)": 0.867432,
+        "GPT 4.1 Nano (Zero-Shot)": 0.847595,
+        "LLama3.2:3b (Zero-Shot)": 0.74655,
+        "BERTimbau (GPT 4.1 Nano Labels)": 0.844206,
+        "XLM-R (GPT 4.1 Nano Labels)": 0.84186,
+        "SVM (GPT 4.1 Nano Labels)": 0.830479,
+        "BERTimbau (LLama3.2:3b Labels)": 0.756239,
+        "XLM-R (LLama3.2:3b Labels)": 0.763973,
+        "BERTimbau (Zero-Shot)": 0.397784,
+        "XLM-R (Zero-Shot)": 0.469912
+    },
+    "olist": {
+        "BERTimbau (GT)": 0.938642,
+        "XLM-R (GT)": 0.935229,
+        "SVM (GT)": 0.921072,
+        "GPT 4.1 Nano (Zero-Shot)": 0.914261,
+        "LLama3.2:3b (Zero-Shot)": 0.876507,
+        "BERTimbau (GPT 4.1 Nano Labels)": 0.911609,
+        "XLM-R (GPT 4.1 Nano Labels)": 0.761831,
+        "SVM (GPT 4.1 Nano Labels)": 0.90372,
+        "BERTimbau (LLama3.2:3b Labels)": 0.89155,
+        "XLM-R (LLama3.2:3b Labels)": 0.888638,
+        "BERTimbau (Zero-Shot)": 0.345398,
+        "XLM-R (Zero-Shot)": 0.457853
+    },
+    "mean_macro_f1": {
+        "BERTimbau (GT)": 0.880118,
+        "XLM-R (GT)": 0.773508,
+        "SVM (GT)": 0.829187,
+        "GPT 4.1 Nano (Zero-Shot)": 0.790077,
+        "LLama3.2:3b (Zero-Shot)": 0.71331,
+        "BERTimbau (GPT 4.1 Nano Labels)": 0.789876,
+        "XLM-R (GPT 4.1 Nano Labels)": 0.721365,
+        "SVM (GPT 4.1 Nano Labels)": 0.774074,
+        "BERTimbau (LLama3.2:3b Labels)": 0.728235,
+        "XLM-R (LLama3.2:3b Labels)": 0.733323,
+        "BERTimbau (Zero-Shot)": 0.359202,
+        "XLM-R (Zero-Shot)": 0.353939
+    }
+}

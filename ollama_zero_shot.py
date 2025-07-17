@@ -38,13 +38,13 @@ INT_TO_LABEL = {1: "positivo", 0: "negativo"}
 OLLAMA_MODEL = "llama3.2:3b"  # Allow override if needed
 
 SYSTEM_PROMPT = """
-Você é um assistente especializado em análise de sentimento em português. Sua tarefa é analisar o sentimento de textos e responder somente em JSON, SEMPRE usando esta estrutura exata:
+`Você é um assistente especializado em análise de sentimento em português. Sua tarefa é analisar o sentimento de textos e responder somente em JSON, SEMPRE usando esta estrutura exata:
 
 {
     "sentiment": "positivo" ou "negativo"
 }
 
-Nunca use outras palavras, categorias ou explicações. Apenas responda com "positivo" ou "negativo", sempre dentro do JSON especificado.
+Nunca use outras palavras, categorias ou explicações. Apenas responda com "positivo" ou "negativo", sempre dentro do JSON especificado.`
 """
 
 def load_dataset(name, split="test"):
